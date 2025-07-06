@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composeplayground.ui.theme.ComposePlaygroundTheme
 
-class MainActivity : ComponentActivity() {
+class RowColumnActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -49,13 +49,13 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             Button(onClick = {
                 Log.i("Row","Button 1 clicked")
             },modifier = Modifier.padding(5.dp)) {
-                Text(text = "Button 1")
+                Text(text = "Decrement")
             }
             
             Text(text = "0")
 
             Button(onClick = { Log.i("Row","Button 2 clicked")},modifier = Modifier.padding(5.dp)) {
-                Text(text = "Button 2")
+                Text(text = "Increment")
             }
         }
     }
