@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -14,7 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,9 +36,25 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
 
     val userName by viewModel.userName.collectAsState()
 
+    val apiTrigger by viewModel.apiTrigger.collectAsState()
+
     //Do not survive screen rotation
 
     var count by remember { mutableIntStateOf(0) }
+
+    /**
+     * ------------------------------------------------------------
+     * derivedStateOf:
+     * Derived value that recomputes ONLY when 'count' changes.
+     * Expensive calculations should go here.
+     * ------------------------------------------------------------
+     */
+    val isCountEven by remember {
+        derivedStateOf {
+            println("Dervived Stateof recalculating")
+            count%2 == 0
+        }
+    }
 
     //Survives screen rotation
 
@@ -43,6 +63,21 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
     //Launched Effect runs only once
     LaunchedEffect(Unit) {
         println("Screen Launched -> API call already inside Viewmodel ")
+    }
+
+    /**
+     * ------------------------------------------------------------
+     * LaunchedEffect #2 (runs whenever a ViewModel state changes)
+     * Calls a suspend function
+     * ------------------------------------------------------------
+     */
+    LaunchedEffect(apiTrigger) {
+        viewModel.performApiRefresh()
+        println("LaunchedEffect(apiTrigger) -> Refresh triggered")
+    }
+
+    SideEffect {
+        println("Sidefeect ->Count is $count")
     }
 
     // Scafflod Layout
@@ -59,10 +94,12 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
             }
         }
     ) { padding ->
-        Column (
+        Column(
             modifier = Modifier
                 .padding(padding)
                 .padding(16.dp)
+                .padding(bottom  = 100.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Text(text = "Welcome , $userName", style = MaterialTheme.typography.headlineSmall)
 
@@ -79,15 +116,26 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
 
             OutlinedTextField(
                 value = message,
-                onValueChange = {message = it},
-                label = {Text("Enter message")}
+                onValueChange = { message = it },
+                label = { Text("Enter message") }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+
+
             Text("Your message: $message")
-        }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    viewModel.triggerAPIRefresh()
+                }
+            ) {
+                Text("Refresh")
+            }
 
     }
-
+    }
 }

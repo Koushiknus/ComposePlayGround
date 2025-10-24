@@ -12,8 +12,20 @@ class DashboardViewModel : ViewModel() {
     private val _userName = MutableStateFlow("Loading...")
     val userName = _userName.asStateFlow()
 
+    private val _apiTrigger = MutableStateFlow(0)
+    val apiTrigger = _apiTrigger.asStateFlow()
+
     init {
         loadUser()
+    }
+
+    fun triggerAPIRefresh() {
+        _apiTrigger.value++
+    }
+
+    suspend fun performApiRefresh() {
+        delay(500)
+        println("ViewModel -> API refreshed")
     }
 
     private fun loadUser() {
