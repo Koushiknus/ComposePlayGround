@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +33,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
+fun DashboardScreen(viewModel: DashboardViewModel = viewModel()) {
 
     val userName by viewModel.userName.collectAsState()
 
@@ -52,13 +53,13 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
     val isCountEven by remember {
         derivedStateOf {
             println("Dervived Stateof recalculating")
-            count%2 == 0
+            count % 2 == 0
         }
     }
 
     //Survives screen rotation
 
-    var message by rememberSaveable  { mutableStateOf("") }
+    var message by rememberSaveable { mutableStateOf("") }
 
     //Launched Effect runs only once
     LaunchedEffect(Unit) {
@@ -76,11 +77,21 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
         println("LaunchedEffect(apiTrigger) -> Refresh triggered")
     }
 
+    // --------------------------------------------------------------
+    // 6️⃣ SideEffect → Executes AFTER every recomposition
+    // Used for non-suspend side-effects linked to UI state
+    // Example: Updating system UI colors, analytics, logs
+    // --------------------------------------------------------------
     SideEffect {
         println("Sidefeect ->Count is $count")
     }
-
-    // Scafflod Layout
+    
+    DisposableEffect(Unit) {
+        println("Dashboard opened")
+        onDispose {
+            println("Dashboard closed")
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -88,7 +99,7 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {count++}
+                onClick = { count++ }
             ) {
                 Text("+")
             }
@@ -98,7 +109,7 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
             modifier = Modifier
                 .padding(padding)
                 .padding(16.dp)
-                .padding(bottom  = 100.dp)
+                .padding(bottom = 100.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             Text(text = "Welcome , $userName", style = MaterialTheme.typography.headlineSmall)
@@ -107,6 +118,10 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
 
             Text("Count : $count")
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+
+            Text("Even $isCountEven")
 
             Button(onClick = {
                 count++
@@ -122,8 +137,6 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
-
             Text("Your message: $message")
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -136,6 +149,6 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()){
                 Text("Refresh")
             }
 
-    }
+        }
     }
 }

@@ -28,6 +28,14 @@ class DashboardViewModel : ViewModel() {
         println("ViewModel -> API refreshed")
     }
 
+    fun isPrime(n :Int) : Boolean {
+        if(n <2) return false
+        for(i in 2..n/2){
+            if(n%1 == 0) return false
+        }
+        return true
+    }
+
     private fun loadUser() {
         viewModelScope.launch {
             delay(1000)
