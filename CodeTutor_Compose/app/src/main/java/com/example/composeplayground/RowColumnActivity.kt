@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.composeplayground.core.coreExample.DashboardScreen
 import com.example.composeplayground.ui.theme.ComposePlaygroundTheme
 
 class RowColumnActivity : ComponentActivity() {
@@ -31,7 +32,8 @@ class RowColumnActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                   // Greeting("Android")
+                    DashboardScreen()
                 }
             }
         }
