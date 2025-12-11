@@ -6,7 +6,8 @@ fun main() {
     println("Maximum of Array is ${findMax(arrayOf(1,3,5,7,99))}")
     println("Missing number is ${ findMissingNumber(arrayOf(1,2,3,5),5) }")
     println("Majority Element is ${ findTheMajorityElement(listOf(1,2,3,4,5,1,1))}")
-
+    println("Reverse String is ${ reverseWithoutBuiltIn("Bad")}")
+    println("Second largest ...${listOf<Int>(1,2,3,4,5,6).findSecondLargest()}")
 }
 
 //Reverse a String
@@ -41,4 +42,31 @@ fun findTheMajorityElement (numbers : List<Int>) : Int {
         count  += if(candidate == i) 1 else -1
     }
     return candidate
+}
+
+fun reverseWithoutBuiltIn(word : String) : String {
+  val result = StringBuilder()
+  for (i in word.length -1 downTo 0)  {
+      result.append(word[i])
+  }
+    return result.toString()
+}
+
+fun List<Int>.findSecondLargest() : Int? {
+    if(this.size < 2) return null
+    var max = Int.MIN_VALUE
+    var secondMax  = Int.MIN_VALUE
+
+    for(num in this) {
+            when {
+                num > max -> {
+                    secondMax = max
+                    max = num
+                }
+                num > secondMax && num != max -> {
+                    secondMax = num
+                }
+            }
+    }
+    return  if(secondMax == Int.MIN_VALUE) null else secondMax
 }
