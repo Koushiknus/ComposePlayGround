@@ -19,7 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.composeplayground.core.coreExample.DashboardScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composeplayground.core.coreExample.search.UserListScreen
 import com.example.composeplayground.ui.theme.ComposePlaygroundTheme
 
 class RowColumnActivity : ComponentActivity() {
@@ -33,7 +34,8 @@ class RowColumnActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                    // Greeting("Android")
-                    DashboardScreen()
+                  //  DashboardScreen()
+                    UserListScreen(viewModel())
                 }
             }
         }

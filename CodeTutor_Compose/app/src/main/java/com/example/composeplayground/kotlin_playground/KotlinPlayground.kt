@@ -5,6 +5,7 @@ fun main() {
     println("IsPalindrome ${isPalindrome("madam")}")
     println("Maximum of Array is ${findMax(arrayOf(1,3,5,7,99))}")
     println("Missing number is ${ findMissingNumber(arrayOf(1,2,3,5),5) }")
+    println("Majority Element is ${ findTheMajorityElement(listOf(1,2,3,4,5,1,1))}")
 
 }
 
@@ -27,4 +28,17 @@ fun findMissingNumber(arr : Array<Int>,n : Int) : Int {
     val arraySum = arr.sum()
     val wholeNumberSum = n * ((n+1)/2)
     return wholeNumberSum - arraySum
+}
+
+fun findTheMajorityElement (numbers : List<Int>) : Int {
+    var candidate = 0
+    var count = 0
+
+    for ( i in numbers) {
+        if(count == 0) {
+            candidate = i
+        }
+        count  += if(candidate == i) 1 else -1
+    }
+    return candidate
 }
