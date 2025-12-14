@@ -1,5 +1,7 @@
 package com.example.composeplayground.kotlin_playground
 
+import java.time.temporal.TemporalAmount
+
 fun main() {
     println("Reverse String  ${reverseString("Kotlin")}")
     println("IsPalindrome ${isPalindrome("madam")}")
@@ -8,6 +10,9 @@ fun main() {
     println("Majority Element is ${ findTheMajorityElement(listOf(1,2,3,4,5,1,1))}")
     println("Reverse String is ${ reverseWithoutBuiltIn("Bad")}")
     println("Second largest ...${listOf<Int>(1,2,3,4,5,6).findSecondLargest()}")
+    println("Filter transactions... ${filterTransactions(listOf(Transactions("1",3000.00),Transactions("2",2000.00)),
+        )}")
+    println("Remove duplicates... ${removeDuplicates(arrayOf(1,1,2,2,3,4,5))}")
 }
 
 //Reverse a String
@@ -70,3 +75,16 @@ fun List<Int>.findSecondLargest() : Int? {
     }
     return  if(secondMax == Int.MIN_VALUE) null else secondMax
 }
+
+fun filterTransactions(list : List<Transactions>): List<Transactions> {
+    return list.sortedBy { it.amount }
+}
+
+fun removeDuplicates(list : Array<Int>) : Set<Int> {
+    return list.toSet()
+}
+
+data class Transactions(
+    val id : String,
+    val amount: Double
+)
