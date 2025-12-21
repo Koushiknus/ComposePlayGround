@@ -1,6 +1,11 @@
 package com.example.composeplayground.kotlin_playground
 
-import java.time.temporal.TemporalAmount
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.runBlocking
 
 fun main() {
     println("Reverse String  ${reverseString("Kotlin")}")
@@ -13,6 +18,11 @@ fun main() {
     println("Filter transactions... ${filterTransactions(listOf(Transactions("1",3000.00),Transactions("2",2000.00)),
         )}")
     println("Remove duplicates... ${removeDuplicates(arrayOf(1,1,2,2,3,4,5))}")
+    runBlocking {
+        combineExample()
+    }
+
+    println("SortedSquare....${sortedSquares(intArrayOf(-4, -1, 0, 3, 10)).joinToString()}")
 }
 
 //Reverse a String
@@ -88,3 +98,45 @@ data class Transactions(
     val id : String,
     val amount: Double
 )
+
+val flowA = flowOf(1,2,3)
+val flowB = flowOf(5,6,7)
+
+suspend fun combineExample() {
+    combine(flowA,flowB) { a, b ->
+        a+b
+    }.collect{
+        println(it)
+    }
+
+    flowA.zip(flowB) { a,b ->
+        a to b
+    }.collect {
+        print("ZiP Example $it")
+    }
+
+    merge(flowA, flowB).collect {
+        println("MergeExample $it")
+    }
+
+
+}
+//Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+//Output: [1,2,2,3,5,6]
+
+fun merge(nums1: IntArray, m: Int, nums2: IntArray, n: Int): Unit {
+
+    for(i in  0 until n) {
+        nums1[m+i] = nums2[i]
+    }
+    nums1.sort()
+}
+
+fun sortedSquares(nums: IntArray): IntArray {
+    val squareInt = nums.map { it*it }.toIntArray()
+    return squareInt.sortedArray()
+}
+
+
+
+
